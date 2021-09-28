@@ -23,6 +23,8 @@ api.add_resource(filt_resources.ButterworthFilter,'/filter/bandpass')
 api.add_resource(filt_resources.FilterPipeline,'/filter/pipeline')
 
 #classifier
+api.add_resource(classifier_resources.PredictAbnormality,'/classifier/abnormality')
+api.add_resource(classifier_resources.PredictDisorder,'/classifier/disorder')
 api.add_resource(classifier_resources.Visualize_Result,'/classifier/visualize')
 
 #handling page not found error

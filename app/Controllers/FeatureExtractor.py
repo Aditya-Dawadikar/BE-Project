@@ -10,6 +10,7 @@ class FeatureExtractor:
         self.n_chroma=12
         pass
 
+    # returns 2D matrix or a Flat array of MFCC features
     def get_mfcc(self,signaldata,samplingrate,flat=False):
         if samplingrate!=utils.resamp_rate:
             signaldata=utils.resample(signaldata,samplingrate,utils.resamp_rate)
@@ -19,6 +20,7 @@ class FeatureExtractor:
             mfcc=mfcc.flatten()
         return mfcc
 
+    # returns 2D matrix or a Flat array of chroma stft
     def get_chroma_stft(self,signaldata,samplingrate,flat=False):
         if samplingrate!=utils.resamp_rate:
             signaldata=utils.resample(signaldata,samplingrate,utils.resamp_rate)
@@ -28,6 +30,7 @@ class FeatureExtractor:
             chroma_stft=chroma_stft.flatten()
         return chroma_stft
 
+    # returns 2D matrix or a Flat array of mel spectrogram
     def get_mel_spectrogram(self,signaldata,samplingrate,flat=False):
         if samplingrate!=utils.resamp_rate:
             signaldata=utils.resample(signaldata,samplingrate,utils.resamp_rate)
