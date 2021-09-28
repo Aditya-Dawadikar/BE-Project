@@ -4,6 +4,7 @@ import scipy.io
 from scipy import signal
 from scipy.signal import butter, sosfilt, sosfreqz
 from skimage.restoration import denoise_wavelet
+import librosa as lb
 
 class FilterBank:
     
@@ -38,6 +39,12 @@ class FilterBank:
         waveletdenoiseVisu = denoise_wavelet(data,method='VisuShrink',mode='soft',wavelet_levels=self.wavelet_level,wavelet='sym8',rescale_sigma='False')
         return waveletdenoiseVisu
 
+    def harmonic_component(self,data):
+        # harmonic component seperation from ambient noise
+        # decomposition=hpss
+        harmonic=lb.effects.harmonic(y=data)
+        return harmonic
+
     # returns the pure sample by removing FFT induced weak signals
     def getPureSample(self,original_data,filtered_data):
         start=0
@@ -64,15 +71,16 @@ class FilterBank:
     
     def filterbank(self,signaldata,samplingrate=44100):
         # Applies 3 filter layers to the input signal
-        # step 1. wavelet denoise
-        # step 2. Butterworth Bandpass
-        # step 3. Cleaning sample 
+        # step 1. harmonic-percussive component seperation
+        # step 2. wavelet denoise
+        # step 3. Butterworth Bandpass
+        # step 4. Cleaning sample 
 
-        #weiner filter
-        weiner_output = signal.wiener(np.array(signaldata), mysize=50, noise=None)
+        #first harmonic extraction
+        harmonic = self.harmonic_component(signaldata)
 
         #wavelet_output = wavelet_denoise_bayes_shrink(signaldata)
-        wavelet_output = self.wavelet_denoise_visu_shrink(weiner_output)
+        wavelet_output = self.wavelet_denoise_visu_shrink(harmonic)
         
         # butterworth bandpass layer
         # adjusted low and high cut for a 100-1000Hz frequency band

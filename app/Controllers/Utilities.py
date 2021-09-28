@@ -4,6 +4,7 @@ from io import BytesIO
 class Utilities:
     def __init__(self):
         self.dpi=300
+        self.resamp_rate=8000
         pass
 
     #A wrapper for converting plot to BytesIO image
@@ -18,4 +19,8 @@ class Utilities:
     def send_plot(self,plt,mimetype='image/png'):
         return send_file(plt,mimetype)
 
-    
+    #downsample audio signal
+    #A wrapper for librosa.resample function.
+    def resample(self,signaldata,samplingrate,targetrate):
+        resampled_signal=lb.resample(signaldata,samplingrate,self.resamp_rate)
+        return resampled_signal

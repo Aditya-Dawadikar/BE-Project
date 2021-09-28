@@ -1,9 +1,18 @@
 from flask import request,jsonify
 from flask_restful import Resource
-from app.Controllers import FilterBank
+from app.Controllers import FilterBank,Preprocessor
 import numpy as np
 
 filter = FilterBank.FilterBank()
+preprocessor = Preprocessor.Preprocessor()
+
+class Harmonic(Resource):
+    def get(self):
+        data = request.json
+        signaldata=np.asarray(data["signaldata"])
+        samplingrate=data["samplingrate"]
+        y_harmonic=filter.harmonic_component(signaldata)
+        return {"y_filtered":y_harmonic.tolist()}
 
 class WaveletFilter(Resource):
     def get(self):

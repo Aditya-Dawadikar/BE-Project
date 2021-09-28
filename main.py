@@ -7,6 +7,7 @@ api = Api(app)
 #importing resources
 from app.RouteResources import Visualization as vis_resources
 from app.RouteResources import Filter as filt_resources
+from app.RouteResources import Classifier as classifier_resources
 
 #Handling routes
 #visualization
@@ -16,9 +17,13 @@ api.add_resource(vis_resources.Spectrogram,'/visualize/spectrogram')
 api.add_resource(vis_resources.TimeFreqSpec,'/visualize/timefreqspec')
 
 #filters
+api.add_resource(filt_resources.Harmonic,'/filter/harmonic')
 api.add_resource(filt_resources.WaveletFilter,'/filter/waveletdenoise')
 api.add_resource(filt_resources.ButterworthFilter,'/filter/bandpass')
 api.add_resource(filt_resources.FilterPipeline,'/filter/pipeline')
+
+#classifier
+api.add_resource(classifier_resources.Visualize_Result,'/classifier/visualize')
 
 #handling page not found error
 @app.errorhandler(404)
