@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from app.Controllers import Utilities,Preprocessor,FeatureExtractor
-from app.Classifiers import Abnormality_classifier, Disorder_classifier
+from app.Classifiers import AbnormalityClassifier, DisorderClassifier
 
 utils=Utilities.Utilities()
 preprocessor = Preprocessor.Preprocessor()
@@ -38,7 +38,7 @@ class Classifier_Preprocessor:
 class Abnormality_classifier_wrapper:
     def __init__(self):
         self.preprocessor = Classifier_Preprocessor()
-        self.abnormality_classifier = Abnormality_classifier.Abnormality_classifier()
+        self.abnormality_classifier = AbnormalityClassifier.AbnormalityClassifier()
         pass
     
     # A warpper for Proprocessor and Abnormality classifier
@@ -50,7 +50,7 @@ class Abnormality_classifier_wrapper:
 class Disorder_classifier_wrapper:
     def __init__(self):
         self.preprocessor = Classifier_Preprocessor()
-        self.disorder_classifier = Disorder_classifier.Disorder_classifier()
+        self.disorder_classifier = DisorderClassifier.DisorderClassifier()
         pass
     
     # A warpper for Proprocessor and disorder classifier

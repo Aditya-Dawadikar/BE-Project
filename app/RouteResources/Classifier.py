@@ -12,8 +12,12 @@ class PredictAbnormality(Resource):
 
     def get(self):
         data = request.json
-        signaldata=np.asarray(data["signaldata"])
-        samplingrate=data["samplingrate"]
+        try:
+            signaldata=data["signaldata"]    
+            samplingrate=data["samplingrate"]
+        except TypeError:
+            return {"Error":"missing key-value"},400
+
         classes,results=self.abnormality_classifier.predict(signaldata,samplingrate)
         return {
                 "classes":classes,
@@ -27,8 +31,12 @@ class PredictDisorder(Resource):
 
     def get(self):
         data = request.json
-        signaldata=np.asarray(data["signaldata"])
-        samplingrate=data["samplingrate"]
+        try:
+            signaldata=data["signaldata"]    
+            samplingrate=data["samplingrate"]
+        except TypeError:
+            return {"Error":"missing key-value"},400
+
         classes,results=self.disorder_classifier.predict(signaldata,samplingrate)
         return {
                 "classes":classes,
@@ -38,7 +46,11 @@ class PredictDisorder(Resource):
 class Visualize_Result(Resource):
     def get(self):
         data = request.json
-        classes=data["classes"]
-        probabilities=data["probabilities"]
+        try:
+            classes=data["classes"]
+            probabilities=data["probabilities"]
+        except TypeError:
+            return {"Error":"missing key-value"},400
+            
         plot=result_visualizer.visualize_results(classes,probabilities)
         return utils.send_plot(plot)
