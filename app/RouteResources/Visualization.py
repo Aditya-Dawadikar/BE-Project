@@ -5,6 +5,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from scipy.fft import fft, fftfreq, rfft, rfftfreq
 import numpy as np
+import pandas as pd
+import seaborn as sns
 import warnings
 
 from app.Controllers import Utilities
@@ -118,4 +120,60 @@ class TimeFreqSpec(Resource):
             warnings.simplefilter("ignore")
             plot=utils.wrap_to_bytesio(self.visualize_audio(data=signaldata,samplingrate=samplingrate))        
             plt.cla()
+        return utils.send_plot(plot)
+
+class Probability(Resource):
+    def __init__(self):
+        pass
+
+    def get_plot_input(self,classes,probabilities):
+        data = {
+            "Class": classes,
+            "Probability": probabilities
+            }
+    
+        df = pd.DataFrame(data, columns=['Class', 'Probability'])
+        return df
+
+    #creates a horizontal bar plot
+    def get_plot_result(self,df):
+        fig, ax = plt.subplots(figsize = (9,8))
+        ax=sns.barplot(x = df.columns[1], y = df.columns[0], data = df,color='r',)
+        ax.set_xlim([0,1])
+        ax.set_xlabel("Probability",fontsize=20)
+        ax.set_ylabel("Class",fontsize=20)
+        ax.tick_params(axis='both', which='major', labelsize=15)
+        ax.tick_params(axis='both', which='minor', labelsize=15)
+        for p in ax.patches:
+            plt.text(
+                        p.get_width()+0.02, #horizontal padding:0.02
+                        p.get_y()+p.get_height()/2, #vertical padding:p.get_height/2
+                        s=f"{round(p.get_width(),2)%100}"+"%", #rounding off to 2 decimal places and converting to percentage
+                        ha='left', 
+                        va='center',
+                        fontsize='x-large'
+                    )
+        return plt
+
+    #A wrapper for generation input dataframe and horizontal bar plot 
+    def visualize_results(self,classes,probabilities):
+        df = self.get_plot_input(classes,probabilities)
+        plot = utils.wrap_to_bytesio(self.get_plot_result(df))
+        return plot
+
+    def get(self):
+        #extracting request body
+        data = request.json
+        try:
+            classes = data["classes"]
+            probabilities = data["probabilities"]
+
+        except TypeError:
+            return {"Error":"missing key-value"},400
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            plot=self.visualize_results(classes,probabilities)
+            plt.cla()
+
         return utils.send_plot(plot)

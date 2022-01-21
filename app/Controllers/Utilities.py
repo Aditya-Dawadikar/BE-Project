@@ -4,7 +4,7 @@ from io import BytesIO
 class Utilities:
     def __init__(self):
         self.dpi=300
-        self.resamp_rate=8000
+        self.resamp_rate=22050
         pass
 
     #A wrapper for converting plot to BytesIO image

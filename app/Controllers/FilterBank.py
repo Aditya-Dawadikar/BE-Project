@@ -77,7 +77,7 @@ class FilterBank:
         # step 4. Cleaning sample 
 
         #first harmonic extraction
-        harmonic = self.harmonic_component(signaldata)
+        harmonic = self.harmonic_component(np.array(signaldata))
 
         #wavelet_output = wavelet_denoise_bayes_shrink(signaldata)
         wavelet_output = self.wavelet_denoise_visu_shrink(harmonic)
