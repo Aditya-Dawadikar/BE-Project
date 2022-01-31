@@ -14,11 +14,12 @@ from app.Controllers import Utilities
 utils = Utilities.Utilities()
 
 class TimeSeries(Resource):
-    def get(self):
+    def post(self):
         #extracting request body
         data = request.json
         try:
-            signaldata=data["signaldata"]
+            signaldata=list(data["signaldata"].values())  #this modification is necessary for getting data from client.
+            samplingrate=data["samplingrate"]
         except TypeError:
             return {"Error":"missing key-value"},400
 
@@ -31,11 +32,11 @@ class TimeSeries(Resource):
         return utils.send_plot(plot)
 
 class Spectrogram(Resource):
-    def get(self):        
+    def post(self):        
         #extracting request body
         data = request.json
         try:
-            signaldata=data["signaldata"]
+            signaldata=list(data["signaldata"].values())  #this modification is necessary for getting data from client.
             samplingrate=data["samplingrate"]
         except TypeError:
             return {"Error":"missing key-value"},400
@@ -161,7 +162,7 @@ class Probability(Resource):
         plot = utils.wrap_to_bytesio(self.get_plot_result(df))
         return plot
 
-    def get(self):
+    def post(self):
         #extracting request body
         data = request.json
         try:
