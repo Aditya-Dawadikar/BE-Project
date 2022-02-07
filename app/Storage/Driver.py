@@ -1,10 +1,8 @@
-# from AudioFile import AudioFile
-# import PyPDF2
+from AudioFile import AudioFile
+import librosa as lb
 
-# file1 = open("example.pdf",'rb')
-# pdfReader = PyPDF2.PdfFileReader(file1)
-# print(pdfReader.numPages)
-
-# rf = ReportFile()
-# rf.save_pdf_file()
-# af.delete_audio_file("1643610976_6938c238b40e483fa20df9346e8401bc.wav")
+signaldata,samplingrate = lb.load('E:/aditya/BE project Database/Database/Additional Dataset/Mendley/Raw/Fibrosis/BP23_Lung Fibrosis,Crep,P R L ,50,M-[AudioTrimmer.com] (2).wav')
+af = AudioFile()
+fileurl = af.save_audio_file(signaldata,samplingrate)
+filename = af.get_filename_from_url(fileurl) 
+print(filename)

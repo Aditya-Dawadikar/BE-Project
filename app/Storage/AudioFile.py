@@ -1,22 +1,9 @@
-import sys
-import os
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(current)
-sys.path.append(parent)
-
 import librosa as lb
 import soundfile as sf
+from app.Storage.UniqueIdGenerator import generate_unique_string
+from FirebaseSetup import fbs
 
-from firebase_admin import credentials, initialize_app, storage
-from Config import storageconfig
-
-from UniqueIdGenerator import generate_unique_string
-
-# Init firebase with your credentials
-cred = credentials.Certificate("../Config/be-project-4b4bf-firebase-adminsdk-wjqnp-4dd24d1742.json")
-initialize_app(cred,{'storageBucket': storageconfig.firebaseConfig["storageBucket"]})
-
-bucket = storage.bucket()
+bucket = fbs.getStorageBucket()
 
 class AudioFile():
     def __init__(self):
@@ -39,7 +26,7 @@ class AudioFile():
         return padded_data,target_sr
     
     def save_audio_file(self,signaldata,samplingrate):
-        temp_dest_path = '../../Temp/audios/'
+        temp_dest_path = 'C:/Users/Admin/Desktop/BE Project/Analytics Server/Temp/audios/'
         filename=generate_unique_string()+".wav"
         file = temp_dest_path+filename
         
@@ -52,7 +39,7 @@ class AudioFile():
         #upload to cloud
         try:
             res = self.upload_to_cloud(filename,temp_dest_path)
-            print(res)
+            return res
         except Exception:
             raise Exception()
         
@@ -65,3 +52,11 @@ class AudioFile():
             raise Exception()
         
         
+    def get_filename_from_url(self,filename):
+        tokens= filename.split('/')
+        return tokens[-1]
+    
+    def upload_audio(self,signaldata,samplingrate):
+        fileurl = self.save_audio_file(signaldata,samplingrate)
+        filename = self.get_filename_from_url(fileurl) 
+        return filename

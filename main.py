@@ -11,6 +11,7 @@ from app.RouteResources import Visualization as vis_resources
 from app.RouteResources import Filter as filt_resources
 from app.RouteResources import ClassifierRoutes as classifier_resources
 from app.RouteResources import TestRoute as test_resources
+from app.RouteResources import StorageRoutes as storage_resources
 
 #Handling routes
 #visualization
@@ -28,6 +29,10 @@ api.add_resource(filt_resources.FilterPipeline,'/api/filter/pipeline')
 
 #classifier
 api.add_resource(classifier_resources.Analyse,'/api/analysis/predict')
+
+#storage
+api.add_resource(storage_resources.AudioMetaResource,'/api/storage/audiometa')
+api.add_resource(storage_resources.SavePDF,'/api/storage/report')
 
 #testing
 api.add_resource(test_resources.TestFlask,'/api/test')

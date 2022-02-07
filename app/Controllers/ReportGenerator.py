@@ -257,5 +257,5 @@ title="Medical Report"
 meta="This report is generated in a automated way"
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac sem ut erat convallis efficitur in sed neque. Pellentesque maximus commodo lectus a luctus. Morbi quis enim velit. Sed posuere felis vel ex viverra vestibulum. Donec pellentesque nibh ac metus condimentum porta. Nam tincidunt, lacus in luctus rutrum, felis dui pellentesque ante, ut molestie tellus odio ultrices purus. Nunc ut semper mi. Nulla consequat semper commodo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut sit amet vehicula nisl. Suspendisse potenti. Aenean tincidunt faucibus ligula, ac mollis ante tincidunt eget. Mauris a mauris finibus, lacinia lectus id, laoreet tellus."
 
-pdf = PDF('P','mm','A4')
-pdf.export(report,doctor,patient,summary,text,segment_list,'report.pdf')
+# pdf = PDF('P','mm','A4')
+# pdf.export(report,doctor,patient,summary,text,segment_list,'report.pdf')
