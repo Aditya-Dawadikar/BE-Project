@@ -19,21 +19,18 @@ class AudioMeta:
         doc = collection.stream()
         return doc
         
-        
     def save_audio_meta(self,analysis_object):
         try:
-            document_id=generate_unique_string()
-            res = collection.document(document_id).set({
-                "segmentname":analysis_object["segmentname"],
-                "samplingrate":analysis_object["samplingrate"],
+            doc_id = analysis_object["filename"].split('.')[0]
+            res = collection.document(doc_id).set({
+                "filename":analysis_object["filename"],
                 "abnormality":analysis_object["abnormality"],
-                "diagnosis":analysis_object["diagnosis"],
+                "disorder":analysis_object["disorder"],
                 "severity":analysis_object["severity"],
                 "symptoms":analysis_object["symptoms"],
-                "isapproved":False
             })
             return {
-                "document_id":document_id    
+                "document_id":doc_id
             }
         except Exception as e:
             print(e)

@@ -31,6 +31,7 @@ api.add_resource(filt_resources.FilterPipeline,'/api/filter/pipeline')
 api.add_resource(classifier_resources.Analyse,'/api/analysis/predict')
 
 #storage
+api.add_resource(storage_resources.SaveData,'/api/storage/save')
 api.add_resource(storage_resources.AudioMetaResource,'/api/storage/audiometa')
 api.add_resource(storage_resources.SavePDF,'/api/storage/report')
 

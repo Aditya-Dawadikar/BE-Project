@@ -3,8 +3,6 @@ import librosa as lb
 import soundfile as sf
 from FirebaseSetup import fbs
 
-from app.Storage.UniqueIdGenerator import generate_unique_string
-
 bucket = fbs.getStorageBucket()
 
 class AudioFile():
