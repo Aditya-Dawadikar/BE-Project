@@ -1,10 +1,11 @@
 from flask import request,jsonify
 from flask_restful import Resource
 from app.Controllers import Utilities, Analyser
-from app.Storage.AudioFile import AudioFile
+from app.Storage.TempAudioFile import TempAudioFile
 import numpy as np
 
 utils = Utilities.Utilities()
+taf = TempAudioFile()
 
 class Analyse(Resource):
     def post(self):
@@ -15,8 +16,7 @@ class Analyse(Resource):
         except TypeError:
             return {"Error":"missing key-value"},400
 
-        af = AudioFile()
-        filename = af.upload_audio(np.array(signaldata),samplingrate)
+        filename = taf.save_to_local_storage(np.array(signaldata),samplingrate)
         analyser = Analyser.Analyser()
         result=analyser.analyse(np.array(signaldata),samplingrate)
         result["segment_id"] = filename

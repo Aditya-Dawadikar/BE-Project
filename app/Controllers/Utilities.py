@@ -24,3 +24,19 @@ class Utilities:
     def resample(self,signaldata,samplingrate,targetrate):
         resampled_signal=lb.resample(signaldata,samplingrate,self.resamp_rate)
         return resampled_signal
+    
+    # standardization
+    def standardize_data(self,signaldata,samplingrate):
+        target_sr = 22050
+        duration = 6
+        resampled=lb.resample(y=signaldata, orig_sr=samplingrate, target_sr=target_sr)
+        reqLen=duration*target_sr
+            
+        if len(resampled)<duration*target_sr:
+            padded_data = lb.util.pad_center(resampled, reqLen)
+            return padded_data,target_sr
+        else:
+            return resampled[0:reqLen],target_sr
+        
+        
+util = Utilities()

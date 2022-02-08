@@ -7,5 +7,5 @@ af = AudioFile()
 
 class TestFlask(Resource):
     def get(self):
-        print(af.migrate_audio("1644248278_73b0811cd20f4636bb61f05a18a3712b.wav"))
+        print(af.get_file("101_1b1_Al_sc_Meditron.wav"))
         return {"hello":"world"}
