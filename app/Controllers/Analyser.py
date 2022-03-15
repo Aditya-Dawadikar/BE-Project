@@ -12,10 +12,11 @@ disorderClassifier = DisorderClassifier.DisorderClassifier()
 
 class Analyser:
     def __init__(self):
-        self.samplingrate=22050
         pass
 
     def analyse(self,signaldata,samplingrate):
+        
+        print(len(signaldata),samplingrate)
 
         #step1: preprocessing
         #step2: feature extraction
@@ -24,24 +25,23 @@ class Analyser:
         #step5: severity analysis
 
         #step1: preprocessing
-        print(type(signaldata))
-        if samplingrate != self.samplingrate:
-            signaldata = lb.resample(y=signaldata, orig_sr=samplingrate, target_sr=self.samplingrate)
-            
-        signaldata= np.array(signaldata)
-
-        padded_segment = preprocessor.get_padded_segment(signaldata,samplingrate=self.samplingrate)
-        filtered_segment = preprocessor.get_filtered_segment(signaldata,samplingrate=self.samplingrate)
-
+        signaldata = lb.resample(y=signaldata, orig_sr=samplingrate, target_sr=22050)
+        padded_segment = lb.util.pad_center(signaldata, 6*22050)
+        filtered_segment = np.array(preprocessor.get_filtered_segment(padded_segment,samplingrate=22050))
+        
         #step2: feature extraction
-        mfcc = featureExtractor.get_mfcc(signaldata,self.samplingrate)
-        spec = featureExtractor.get_mel_spectrogram(signaldata,self.samplingrate)
-        chroma_stft = featureExtractor.get_chroma_stft(signaldata,self.samplingrate)
+        mfcc = featureExtractor.get_mfcc(filtered_segment,22050)
+        spec = featureExtractor.get_mel_spectrogram(filtered_segment,22050)
+        chroma_stft = featureExtractor.get_chroma_stft(filtered_segment,22050)
+        
+        mfcc_arr = np.array([mfcc])
+        spec_arr = np.array([spec])
+        chroma_stft_arr = np.array([chroma_stft])
 
         #step3: abnormality analysis
-        abnormality_classes,abmormality_probabilities = abmormalityClassifier.predict(mfcc,chroma_stft,spec) 
+        abnormality_classes,abmormality_probabilities = abmormalityClassifier.predict(mfcc_arr,chroma_stft_arr,spec_arr) 
         #step4: disorder analysis
-        disorder_classes,disorder_probabilities = disorderClassifier.predict(mfcc,chroma_stft,spec)
+        disorder_classes,disorder_probabilities = disorderClassifier.predict(mfcc_arr,chroma_stft_arr,spec_arr)
         #step5: severity analysis
 
         abnormality_object = {}

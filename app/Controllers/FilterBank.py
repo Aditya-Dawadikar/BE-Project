@@ -69,7 +69,7 @@ class FilterBank:
         
         return newOutputSignal
     
-    def filterbank(self,signaldata,samplingrate=44100):
+    def filterbank(self,signaldata,samplingrate=22050):
         # Applies 3 filter layers to the input signal
         # step 1. harmonic-percussive component seperation
         # step 2. wavelet denoise
@@ -84,7 +84,7 @@ class FilterBank:
         
         # butterworth bandpass layer
         # adjusted low and high cut for a 100-1000Hz frequency band
-        bandpass_output = self.butter_bandpass_filter(wavelet_output, lowcut=self.bandpass_lowcut, highcut=self.bandpass_highcut, fs=samplingrate, order=self.bandpass_order)
+        bandpass_output = self.butter_bandpass_filter(wavelet_output, lowcut=self.bandpass_lowcut, highcut=self.bandpass_highcut, fs=22050, order=self.bandpass_order)
         
         #removing low power signal
         puresample = self.getPureSample(signaldata,bandpass_output)

@@ -5,6 +5,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 api = Api(app)
 cors=CORS(app,resources={r"/api/*": {"origins": "http://localhost:3000"}})
+app.config['UPLOAD_FOLDER']='Temp/audios'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
 #importing resources
 from app.RouteResources import Visualization as vis_resources
@@ -33,7 +35,6 @@ api.add_resource(classifier_resources.Analyse,'/api/analysis/predict')
 #storage
 api.add_resource(storage_resources.SaveData,'/api/storage/save')
 api.add_resource(storage_resources.AudioMetaResource,'/api/storage/audiometa')
-api.add_resource(storage_resources.SavePDF,'/api/storage/report')
 
 #testing
 api.add_resource(test_resources.TestFlask,'/api/test')
@@ -53,4 +54,4 @@ def bad_req(e):
 
 #main
 if __name__=='__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000,debug=True)

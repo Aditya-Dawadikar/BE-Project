@@ -1,5 +1,8 @@
+from tensorflow import keras
+
 class AbnormalityClassifier:
     def __init__(self):
+        # self.model = keras.models.load_model('../MLModels/abnormality/')
         pass
 
     #This is Stub code

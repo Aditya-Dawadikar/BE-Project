@@ -19,5 +19,5 @@ class Preprocessor:
 
     def get_filtered_segment(self,signaldata,samplingrate=SR):
         filter = FilterBank.FilterBank()
-        filtered_data = filter.filterbank(signaldata=signaldata,samplingrate=samplingrate)
+        filtered_data = filter.filterbank(signaldata=signaldata,samplingrate=22050)
         return filtered_data
