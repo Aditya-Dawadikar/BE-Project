@@ -3,6 +3,9 @@ from FirebaseSetup import fbs
 from app.Services.ResponseMessage import rm
 collection = fbs.getAudioMetaCollection()
 
+manulAnnotationCollection = fbs.getManualAnnotationCollection()
+autoAnnotationCollection = fbs.getAutoAnnotationCollection()
+
 class AudioMeta:
     def __init__(self):
         pass
@@ -19,9 +22,15 @@ class AudioMeta:
         doc = collection.stream()
         return doc
         
-    def save_audio_meta(self,analysis_object):
+    def save_audio_meta(self,analysis_object,type):
         try:
             doc_id = analysis_object["filename"].split('.')[0]
+            
+            if type=="auto":
+                collection = fbs.getAutoAnnotationCollection()
+            elif type=="manual":
+                collection = fbs.getManualAnnotationCollection()
+            
             res = collection.document(doc_id).set({
                 "filename":analysis_object["filename"],
                 "abnormality":analysis_object["abnormality"],

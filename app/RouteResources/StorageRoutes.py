@@ -98,6 +98,7 @@ class SaveData(Resource):
             report_summary = data["report_summary"]
             report_note = data["report_note"]
             symptoms = data["symptoms"]
+            mode=data["mode"]
             # audio filename
             audio_segments = data["audio_segments"]
             # audio_segments:[
@@ -116,7 +117,6 @@ class SaveData(Resource):
         # 0. extracting images for report
         audio_base_path = 'C:/Users/Admin/Desktop/BE Project/Analytics Server/Temp/audios/'
         for i,segment in enumerate(audio_segments):
-            print(segment)
             filename = segment["filename"]
             signaldata,samplingrate = lb.load(audio_base_path+filename)
             gp1 = GraphPlotter()
@@ -129,8 +129,6 @@ class SaveData(Resource):
                 "waveform_url":waveform_url,
                 "spectrogram_url":spectrogram_url
             }
-            #adding symptoms to each segment
-            audio_segments[i]["symptoms"]=symptoms
         
         # 1. exporting report
         report = PDF('P', 'mm', 'A4')
@@ -156,8 +154,8 @@ class SaveData(Resource):
             #removing images url from the segment object
             del segment["images"]
             
-            # add new document to audioMeta collection
-            newdoc = am.save_audio_meta(analysis_object=segment)
+            # add new document to required collection
+            newdoc = am.save_audio_meta(analysis_object=segment, type=mode)
             docs.append(newdoc)
             
         # 3. upload report to the cloud

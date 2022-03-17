@@ -11,13 +11,20 @@ class FirebaseSetup:
         # audio meta storage
         self.db = firestore.client()
         self.audioMetaCollection = self.db.collection('audio_meta')
-        
+        self.manualAnnotationCollection = self.db.collection('manually_annotated')
+        self.autoAnnotationCollection = self.db.collection('auto_annotated')
         
     def getStorageBucket(self):
         return self.bucket
     
     def getAudioMetaCollection(self):
         return self.audioMetaCollection
+    
+    def getManualAnnotationCollection(self):
+        return self.manualAnnotationCollection
+    
+    def getAutoAnnotationCollection(self):
+        return self.autoAnnotationCollection
     
     
 fbs = FirebaseSetup()

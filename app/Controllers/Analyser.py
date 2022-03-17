@@ -25,8 +25,15 @@ class Analyser:
         #step5: severity analysis
 
         #step1: preprocessing
+        #step1 a: resampling
         signaldata = lb.resample(y=signaldata, orig_sr=samplingrate, target_sr=22050)
-        padded_segment = lb.util.pad_center(signaldata, 6*22050)
+        #step1 b: padding
+        padded_segment=[]
+        if len(signaldata)<(6*22050):
+            padded_segment = lb.util.pad_center(signaldata, 6*22050)
+        else:
+            padded_segment = padded_segment[0:6*22050]
+        #step1 c: filtering
         filtered_segment = np.array(preprocessor.get_filtered_segment(padded_segment,samplingrate=22050))
         
         #step2: feature extraction
