@@ -91,25 +91,42 @@ class SaveData(Resource):
     
     def post(self):
         data = request.json
+        
+        doctor_info=None
+        patient_info=None
+        report_summary=None
+        report_note=None
+        symptoms=None
+        mode=None        
+        
         try:
-            # report related data
-            doctor_info = data["doctor_info"]
-            patient_info = data["patient_info"]
-            report_summary = data["report_summary"]
-            report_note = data["report_note"]
-            symptoms = data["symptoms"]
             mode=data["mode"]
-            # audio filename
-            audio_segments = data["audio_segments"]
-            # audio_segments:[
-            #     {
-            #         filename:String,                              # local filename given by the server
-            #         abnormality:{classes:[],probabilities:[]},    # final abnormality suggested/approved by clinician
-            #         disorder:{classes:[],probabilities:[]},       # final disorder diagnosed/approved by clinician
-            #         severity:Number,                              # final severity diagnosed/approved by clinician
-            #         symptoms:String                               # clinician reasoning for diagnosis
-            #     },...
-            # ]
+            
+            if mode=='auto':
+                # report related data
+                doctor_info = data["doctor_info"]
+                patient_info = data["patient_info"]
+                report_summary = data["report_summary"]
+                report_note = data["report_note"]
+                symptoms = data["symptoms"]
+                # audio filename
+                audio_segments = data["audio_segments"]
+                # audio_segments:[
+                #     {
+                #         filename:String,                              # local filename given by the server
+                #         abnormality:{classes:[],probabilities:[]},    # final abnormality suggested/approved by clinician
+                #         disorder:{classes:[],probabilities:[]},       # final disorder diagnosed/approved by clinician
+                #         severity:Number,                              # final severity diagnosed/approved by clinician
+                #         symptoms:String                               # clinician reasoning for diagnosis
+                #     },...
+                # ]
+            elif mode=='manual':
+                doctor_info = data["doctor_info"]
+                patient_info = data["patient_info"]
+                report_note = data["report_note"]
+                report_summary = data["report_summary"]
+                symptoms = data["symptoms"]
+                audio_segments = data["audio_segments"]
         except ValueError:
             return {"Error":"missing key-value"},400
         
@@ -132,7 +149,7 @@ class SaveData(Resource):
         
         # 1. exporting report
         report = PDF('P', 'mm', 'A4')
-        report_id = report.export(doctor_info,patient_info,report_summary,report_note,audio_segments)
+        report_id = report.export(doctor_info,patient_info,report_summary,report_note,audio_segments,mode)
         
         # 2. uploading audio files to cloud
         docs=[]

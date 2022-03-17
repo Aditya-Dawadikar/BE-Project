@@ -98,6 +98,34 @@ class PDF(FPDF, HTMLMixin):
             </section>                
         """)
 
+    def manual_summary(self, summary):
+        # summary table
+        self.set_font('helvetica', 'B', 12)
+        self.cell(0, 10, "Report Summary", ln=True, align='C')
+        self.set_font('helvetica', '', 12)
+        self.write_html(f"""
+            <section>
+                <table width="70%">
+                    <tr>
+                        <th width="30%">Factor</th>
+                        <th width="50%">Value</th>
+                    </tr>
+                    <tr>
+                        <td>Abnormality </td>
+                        <td>{summary["abnormality"]}</td> 
+                    </tr>
+                    <tr>
+                        <td>Disorder </td>
+                        <td>{summary["disorder"]}</td> 
+                    </tr>
+                    <tr>
+                        <td>Severity</td>
+                        <td>{summary["severity"]}</td>
+                    </tr>
+                </table>
+            </section>                
+        """)
+
         # <tr>
         #     <td>Severity</td>
         #     <td>{summary["severity"]["name"]}</td>
@@ -167,7 +195,8 @@ class PDF(FPDF, HTMLMixin):
         self.disorder_table(segment["disorder"])
         self.abnormality_table(segment["abnormality"])
 
-    def assembler(self, report, doctor, patient, summary, text, segment_list):
+    def assembler(self, report, doctor, patient, summary, text, segment_list, mode):
+
         # initializing pdf object for standardization
         self.alias_nb_pages()
         self.set_auto_page_break(auto=True, margin=15)
@@ -180,28 +209,29 @@ class PDF(FPDF, HTMLMixin):
         self.report_head()
         self.patient_info(patient)
         self.note(text)
-        self.analysis_summary(summary)
 
-        # analysis page: Analysis visualizations segmentwise analysis
-        for segment in segment_list:
-            self.add_page()
-            self.segment_analysis(segment)
+        if mode == 'auto':
+            self.analysis_summary(summary)
 
-    def export(self, doctor, patient, summary, text, segment_list):
+            # analysis page: Analysis visualizations segmentwise analysis
+            for segment in segment_list:
+                self.add_page()
+                self.segment_analysis(segment)
+        elif mode == 'manual':
+            self.manual_summary(summary)
+
+    def export(self, doctor, patient, summary, text, segment_list, mode):
         # creating unique filename
         filename = generate_unique_string()+".pdf"
         dest_path = "C:/Users/Admin/Desktop/BE Project/Analytics Server/Temp/reports/"
-
-        print()
-        print(summary)
-        print()
 
         # making segment_list object suitable for assembling
         # for segment in segment_list:
         report = {
             "id": filename.split(".")[0]
         }
-        self.assembler(report, doctor, patient, summary, text, segment_list)
+        self.assembler(report, doctor, patient, summary,
+                       text, segment_list, mode)
         self.output(dest_path+filename)
         return filename
 
