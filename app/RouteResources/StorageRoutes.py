@@ -2,7 +2,7 @@ from flask import request,jsonify
 from flask_restful import Resource
 
 from app.Services.ResponseMessage import rm
-from app.Controllers.ReportGenerator import report
+from app.Controllers.ReportGenerator import PDF
 from app.Storage.AudioMeta import AudioMeta
 from app.Storage.AudioFile import AudioFile
 from app.Storage.ReportFile import ReportFile
@@ -116,6 +116,7 @@ class SaveData(Resource):
         # 0. extracting images for report
         audio_base_path = 'C:/Users/Admin/Desktop/BE Project/Analytics Server/Temp/audios/'
         for i,segment in enumerate(audio_segments):
+            print(segment)
             filename = segment["filename"]
             signaldata,samplingrate = lb.load(audio_base_path+filename)
             gp1 = GraphPlotter()
@@ -132,6 +133,7 @@ class SaveData(Resource):
             audio_segments[i]["symptoms"]=symptoms
         
         # 1. exporting report
+        report = PDF('P', 'mm', 'A4')
         report_id = report.export(doctor_info,patient_info,report_summary,report_note,audio_segments)
         
         # 2. uploading audio files to cloud

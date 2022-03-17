@@ -18,9 +18,9 @@ class Analyse(Resource):
         except TypeError:
             return {"Error":"missing key-value"},400
 
-        # filename = taf.save_to_local_storage(np.array(signaldata),samplingrate)
+        filename = taf.save_to_local_storage(np.array(signaldata),samplingrate)
         analyser = Analyser.Analyser()
         result=analyser.analyse(np.array(signaldata),samplingrate)
-        # result["segment_id"] = filename
-        result["segment_id"] = generate_unique_string()+".wav"
+        result["segment_id"] = filename
+        # result["segment_id"] = generate_unique_string()+".wav"
         return result

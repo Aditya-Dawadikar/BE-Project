@@ -23,6 +23,7 @@ class GraphPlotter:
     def savePlot(self):
         filename = self.temp_dest+generate_unique_string()+".png"
         plt.savefig(filename)
+        plt.clf()
         return filename
     
     def timeseries(self,signaldata):
