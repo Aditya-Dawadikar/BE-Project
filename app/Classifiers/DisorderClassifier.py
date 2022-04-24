@@ -6,9 +6,7 @@ class DisorderClassifier:
         self.model = keras.models.load_model('C:/Users/Admin/Desktop/BE Project/Analytics Server/app/MLModels/disorder/mfcc_chroma_spec.h5')
         pass
 
-    #This is Stub code
     def predict(self,mfcc_features,chroma_features,mel_spectrogram):
-        # console.log(mfcc_features)
         out = self.model.predict({"mfcc":mfcc_features,"chroma":chroma_features,"mspec":mel_spectrogram})[0]
         print(type(out))
         probabilities = []
